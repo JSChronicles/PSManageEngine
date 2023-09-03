@@ -1,0 +1,35 @@
+name: Pester
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+    paths-ignore:
+      - '**.md'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Psscriptanalyzer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Perform all Pester tests from the pester folder
+        shell: pwsh
+        run: |
+          Invoke-Pester -Path "./tests/*" -Passthru
+
+    if: ${{ always() }}
